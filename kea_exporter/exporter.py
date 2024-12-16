@@ -569,7 +569,7 @@ class Exporter:
 
             # merge static and dynamic labels
             labels.update(metric_info.get("labels", {}))
-            labels.update("server": target_name)
+            labels.update({"server": target_name})
 
             # Filter labels that are not configured for the metric
             labels = {key: val for key, val in labels.items() if key in metric._labelnames}
