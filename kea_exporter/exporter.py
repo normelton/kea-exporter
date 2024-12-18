@@ -522,7 +522,7 @@ class Exporter:
                     continue
 
                 labels["subnet"] = subnet_data.get("subnet")
-                labels["subnet_name"] = subnet_data.get("user-context", {}).get("name")
+                labels["subnet_name"] = subnet_data.get("user-context", {}).get("name", "")
                 labels["subnet_id"] = subnet_id
 
                 # Check if subnet matches the pool_index
