@@ -81,6 +81,7 @@ class Exporter:
                 [
                     "subnet",
                     "subnet_id",
+                    "subnet_name",
                     "context",
                     "server",
                 ],
@@ -88,37 +89,37 @@ class Exporter:
             "addresses_assigned_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_assigned_total",
                 "Assigned addresses",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_declined_total",
                 "Declined counts",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_declined_reclaimed_total",
                 "Declined addresses that were reclaimed",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_reclaimed_total",
                 "Expired addresses that were reclaimed",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_total",
                 "Size of subnet address pool",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "reservation_conflicts_total": Gauge(
                 f"{self.prefix_dhcp4}_reservation_conflicts_total",
                 "Reservation conflict count",
-                ["subnet", "subnet_id", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "leases_reused_total": Gauge(
                 f"{self.prefix_dhcp4}_leases_reused_total",
                 "Number of times an IPv4 lease has been renewed in memory",
-                ["subnet", "subnet_id", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
         }
 
@@ -271,6 +272,7 @@ class Exporter:
                 [
                     "subnet",
                     "subnet_id",
+                    "subnet_name",
                     "context",
                     "server",
                 ],
@@ -278,50 +280,50 @@ class Exporter:
             "addresses_declined_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_declined_total",
                 "Declined addresses",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_declined_reclaimed_total",
                 "Declined addresses that were reclaimed",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_reclaimed_total",
                 "Expired addresses that were reclaimed",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "reservation_conflicts_total": Gauge(
                 f"{self.prefix_dhcp6}_reservation_conflicts_total",
                 "Reservation conflict count",
-                ["subnet", "subnet_id", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             # IA_NA
             "na_assigned_total": Gauge(
                 f"{self.prefix_dhcp6}_na_assigned_total",
                 "Assigned non-temporary addresses (IA_NA)",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "na_total": Gauge(
                 f"{self.prefix_dhcp6}_na_total",
                 "Size of non-temporary address pool",
-                ["subnet", "subnet_id", "pool", "server"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "na_reuses_total": Gauge(
-                f"{self.prefix_dhcp6}_na_reuses_total", "Number of IA_NA lease reuses", ["subnet", "subnet_id", "pool", "server"]
+                f"{self.prefix_dhcp6}_na_reuses_total", "Number of IA_NA lease reuses", ["subnet", "subnet_id", "subnet_name", "pool", "server"]
             ),
             # IA_PD
             "pd_assigned_total": Gauge(
                 f"{self.prefix_dhcp6}_pd_assigned_total",
                 "Assigned prefix delegations (IA_PD)",
-                ["subnet", "subnet_id", "server"],
+                ["subnet", "subnet_id", "subnet_name", "server"],
             ),
             "pd_total": Gauge(
                 f"{self.prefix_dhcp6}_pd_total",
                 "Size of prefix delegation pool",
-                ["subnet", "subnet_id", "server"],
+                ["subnet", "subnet_id", "subnet_name", "server"],
             ),
             "pd_reuses_total": Gauge(
-                f"{self.prefix_dhcp6}_pd_reuses_total", "Number of IA_PD lease reuses", ["subnet", "subnet_id", "pool", "server"]
+                f"{self.prefix_dhcp6}_pd_reuses_total", "Number of IA_PD lease reuses", ["subnet", "subnet_id", "subnet_name", "pool", "server"]
             ),
         }
 
@@ -522,6 +524,7 @@ class Exporter:
                     continue
 
                 labels["subnet"] = subnet_data.get("subnet")
+                labels["subnet_name"] = subnet_data.get("user-context", {}).get("name", "")
                 labels["subnet_id"] = subnet_id
 
                 # Check if subnet matches the pool_index
