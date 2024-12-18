@@ -72,7 +72,7 @@ class Exporter:
             "received_packets": Gauge(
                 f"{self.prefix_dhcp4}_packets_received_total",
                 "Packets received",
-                ["operation"],
+                ["operation", "server"],
             ),
             # per Subnet or Subnet pool
             "addresses_allocation_fail": Gauge(
@@ -83,42 +83,43 @@ class Exporter:
                     "subnet_id",
                     "subnet_name",
                     "context",
+                    "server",
                 ],
             ),
             "addresses_assigned_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_assigned_total",
                 "Assigned addresses",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_declined_total",
                 "Declined counts",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_declined_reclaimed_total",
                 "Declined addresses that were reclaimed",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_reclaimed_total",
                 "Expired addresses that were reclaimed",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_total": Gauge(
                 f"{self.prefix_dhcp4}_addresses_total",
                 "Size of subnet address pool",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "reservation_conflicts_total": Gauge(
                 f"{self.prefix_dhcp4}_reservation_conflicts_total",
                 "Reservation conflict count",
-                ["subnet", "subnet_id", "subnet_name"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "leases_reused_total": Gauge(
                 f"{self.prefix_dhcp4}_leases_reused_total",
                 "Number of times an IPv4 lease has been renewed in memory",
-                ["subnet", "subnet_id", "subnet_name"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
         }
 
@@ -247,22 +248,22 @@ class Exporter:
     def setup_dhcp6_metrics(self):
         self.metrics_dhcp6 = {
             # Packets sent/received
-            "sent_packets": Gauge(f"{self.prefix_dhcp6}_packets_sent_total", "Packets sent", ["operation"]),
+            "sent_packets": Gauge(f"{self.prefix_dhcp6}_packets_sent_total", "Packets sent", ["operation", "server"]),
             "received_packets": Gauge(
                 f"{self.prefix_dhcp6}_packets_received_total",
                 "Packets received",
-                ["operation"],
+                ["operation", "server"],
             ),
             # DHCPv4-over-DHCPv6
             "sent_dhcp4_packets": Gauge(
                 f"{self.prefix_dhcp6}_packets_sent_dhcp4_total",
                 "DHCPv4-over-DHCPv6 Packets received",
-                ["operation"],
+                ["operation", "server"],
             ),
             "received_dhcp4_packets": Gauge(
                 f"{self.prefix_dhcp6}_packets_received_dhcp4_total",
                 "DHCPv4-over-DHCPv6 Packets received",
-                ["operation"],
+                ["operation", "server"],
             ),
             # per Subnet or pool
             "addresses_allocation_fail": Gauge(
@@ -273,55 +274,56 @@ class Exporter:
                     "subnet_id",
                     "subnet_name",
                     "context",
+                    "server",
                 ],
             ),
             "addresses_declined_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_declined_total",
                 "Declined addresses",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_declined_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_declined_reclaimed_total",
                 "Declined addresses that were reclaimed",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "addresses_reclaimed_total": Gauge(
                 f"{self.prefix_dhcp6}_addresses_reclaimed_total",
                 "Expired addresses that were reclaimed",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "reservation_conflicts_total": Gauge(
                 f"{self.prefix_dhcp6}_reservation_conflicts_total",
                 "Reservation conflict count",
-                ["subnet", "subnet_id", "subnet_name"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             # IA_NA
             "na_assigned_total": Gauge(
                 f"{self.prefix_dhcp6}_na_assigned_total",
                 "Assigned non-temporary addresses (IA_NA)",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "na_total": Gauge(
                 f"{self.prefix_dhcp6}_na_total",
                 "Size of non-temporary address pool",
-                ["subnet", "subnet_id", "subnet_name", "pool"],
+                ["subnet", "subnet_id", "subnet_name", "pool", "server"],
             ),
             "na_reuses_total": Gauge(
-                f"{self.prefix_dhcp6}_na_reuses_total", "Number of IA_NA lease reuses", ["subnet", "subnet_id", "subnet_name", "pool"]
+                f"{self.prefix_dhcp6}_na_reuses_total", "Number of IA_NA lease reuses", ["subnet", "subnet_id", "subnet_name", "pool", "server"]
             ),
             # IA_PD
             "pd_assigned_total": Gauge(
                 f"{self.prefix_dhcp6}_pd_assigned_total",
                 "Assigned prefix delegations (IA_PD)",
-                ["subnet", "subnet_id", "subnet_name"],
+                ["subnet", "subnet_id", "subnet_name", "server"],
             ),
             "pd_total": Gauge(
                 f"{self.prefix_dhcp6}_pd_total",
                 "Size of prefix delegation pool",
-                ["subnet", "subnet_id", "subnet_name"],
+                ["subnet", "subnet_id", "subnet_name", "server"],
             ),
             "pd_reuses_total": Gauge(
-                f"{self.prefix_dhcp6}_pd_reuses_total", "Number of IA_PD lease reuses", ["subnet", "subnet_id", "subnet_name", "pool"]
+                f"{self.prefix_dhcp6}_pd_reuses_total", "Number of IA_PD lease reuses", ["subnet", "subnet_id", "subnet_name", "pool", "server"]
             ),
         }
 
@@ -474,7 +476,7 @@ class Exporter:
             "v6-allocation-fail",
         ]
 
-    def parse_metrics(self, dhcp_version, arguments, subnets):
+    def parse_metrics(self, target_name, dhcp_version, arguments, subnets):
         for key, data in arguments.items():
             if dhcp_version is DHCPVersion.DHCP4:
                 if key in self.metrics_dhcp4_global_ignore:
@@ -570,6 +572,7 @@ class Exporter:
 
             # merge static and dynamic labels
             labels.update(metric_info.get("labels", {}))
+            labels.update({"server": target_name})
 
             # Filter labels that are not configured for the metric
             labels = {key: val for key, val in labels.items() if key in metric._labelnames}
